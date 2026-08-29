@@ -8,12 +8,19 @@ echo "========================================="
 # 1. Tentukan Port Tunggal (Railway menyuplai $PORT, default 8080)
 PORT="${PORT:-8080}"
 echo "[Config] Apache listening on Port: ${PORT}"
+
+# 2. Source Apache envvars dan siapkan direktori runtime
+. /etc/apache2/envvars 2>/dev/null || true
+export PORT=${PORT}
 echo "export PORT=${PORT}" >> /etc/apache2/envvars
 
-# 2. Tulis ports.conf tanpa duplikasi Listen
+mkdir -p ${APACHE_RUN_DIR:-/var/run/apache2} ${APACHE_LOCK_DIR:-/var/lock/apache2} ${APACHE_LOG_DIR:-/var/log/apache2}
+rm -f ${APACHE_PID_FILE:-/var/run/apache2/apache2.pid} /var/run/apache2/apache2.pid 2>/dev/null || true
+
+# 3. Tulis ports.conf
 echo "Listen ${PORT}" > /etc/apache2/ports.conf
 
-# 3. Tulis VirtualHost 000-default.conf yang valid
+# 4. Tulis VirtualHost 000-default.conf yang valid
 cat <<EOF > /etc/apache2/sites-available/000-default.conf
 <VirtualHost *:${PORT}>
     ServerName localhost
@@ -30,7 +37,7 @@ cat <<EOF > /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 EOF
 
-# 4. FIX MUTLAK MPM: Pastikan hanya single mpm_prefork yang aktif
+# 5. FIX MPM: Pastikan hanya single mpm_prefork yang aktif
 rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf 2>/dev/null || true
 ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
 ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
@@ -42,11 +49,11 @@ a2ensite 000-default.conf 2>/dev/null || true
 echo "[Apache] Menjalankan config test..."
 apache2ctl -t
 
-# 5. Buat symlink storage publik
+# 6. Buat symlink storage publik
 echo "[1/4] Menghubungkan storage publik..."
 php artisan storage:link --force 2>/dev/null || true
 
-# 6. Jalankan Migrasi & Seed Database
+# 7. Jalankan Migrasi & Seed Database
 echo "[2/4] Menjalankan migrasi database..."
 php artisan migrate --force || true
 
@@ -55,7 +62,7 @@ php artisan db:seed --class=RoleSeeder --force 2>/dev/null || true
 php artisan db:seed --class=PermissionSeeder --force 2>/dev/null || true
 php artisan db:seed --class=UserSeeder --force 2>/dev/null || true
 
-# 7. Optimalkan cache Laravel
+# 8. Optimalkan cache Laravel
 echo "[4/4] Mengoptimalkan cache sistem..."
 php artisan optimize:clear 2>/dev/null || true
 php artisan config:cache 2>/dev/null || true
@@ -66,5 +73,5 @@ echo "========================================="
 echo "  Server SiARSIP siap. Menjalankan Apache di port ${PORT}..."
 echo "========================================="
 
-# Jalankan Apache di foreground
-exec apache2 -DFOREGROUND
+# Jalankan Apache resmi dengan apache2-foreground
+exec apache2-foreground
