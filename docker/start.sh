@@ -17,7 +17,8 @@ echo "export PORT=${PORT}" >> /etc/apache2/envvars
 mkdir -p ${APACHE_RUN_DIR:-/var/run/apache2} ${APACHE_LOCK_DIR:-/var/lock/apache2} ${APACHE_LOG_DIR:-/var/log/apache2}
 rm -f ${APACHE_PID_FILE:-/var/run/apache2/apache2.pid} /var/run/apache2/apache2.pid 2>/dev/null || true
 
-# 3. Tulis ports.conf
+# 3. Tulis ports.conf dan ServerName global (menghilangkan notice AH00558)
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
 echo "Listen ${PORT}" > /etc/apache2/ports.conf
 
 # 4. Tulis VirtualHost 000-default.conf yang valid
