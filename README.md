@@ -433,5 +433,6 @@ Beberapa hal yang perlu diperhatikan sebelum penggunaan production:
 - **Migrasi gagal pada deployment Railway** — perhatikan log `docker/start.sh`; skrip akan menghentikan proses boot jika `php artisan migrate --force` gagal, biasanya karena variabel koneksi database belum diset dengan benar pada environment production.
 
 ## Lisensi
+Proyek ini dilisensikan di bawah MIT License — lihat file LICENSE untuk teks lengkapnya. Lisensi ini memberikan izin bebas untuk menggunakan, menyalin, memodifikasi, mengintegrasikan, mendistribusikan ulang, maupun mengembangkan lebih lanjut source code ini, termasuk untuk kebutuhan internal Inspektorat Daerah Samarinda maupun pihak lain, selama notice copyright dan izin (permission notice) pada file LICENSE tetap disertakan pada setiap salinan atau bagian substansial dari source code.
 
-Repository ini belum menyertakan file `LICENSE`. Berkas `composer.json` masih menggunakan metadata bawaan template `laravel/laravel` (nama paket dan lisensi MIT default skeleton Laravel) dan belum disesuaikan untuk identitas proyek SiARSIP. Sampai file lisensi resmi ditambahkan, perlakukan proyek ini sebagai perangkat lunak internal/proprietary milik pemilik repository.
+Perlu dicatat, metadata pada composer.json (nama paket laravel/laravel dan deskripsi skeleton) masih merupakan bawaan template Laravel dan belum disesuaikan dengan identitas proyek SiARSIP; hal ini tidak memengaruhi keberlakuan LICENSE, namun disarankan untuk diperbarui agar konsisten.
