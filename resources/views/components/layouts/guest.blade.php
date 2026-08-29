@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title . ' — ' : '' }}{{ config('app.name', 'SiARSIP') }}</title>
+    <title>{{ isset($title) ? $title . ' — ' : '' }}SI Arsip</title>
     <meta name="description" content="Sistem Pengelolaan Arsip Surat Kedinasan — Masuk untuk mengelola surat masuk dan keluar.">
 
     <!-- Favicon -->

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403 — Akses Ditolak | {{ config('app.name', 'SiARSIP') }}</title>
+    <title>403 — Akses Ditolak | SI Arsip</title>
     
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('logo.png') }}" type="image/png">
