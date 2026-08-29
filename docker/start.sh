@@ -1,23 +1,21 @@
 #!/bin/bash
+set -e
 
 echo "========================================="
 echo "  SiARSIP — Railway Production Boot"
 echo "========================================="
 
-# 1. Tentukan Port
-PORT="${PORT:-8080}"
-echo "[Config] Apache listening on Port: ${PORT} and Port: 80"
+# 1. Tentukan Port Tunggal (Railway selalu menyuplai $PORT, default 80 jika tidak ada)
+PORT="${PORT:-80}"
+echo "[Config] Apache listening on Port: ${PORT}"
 echo "export PORT=${PORT}" >> /etc/apache2/envvars
 
-# 2. Tulis file ports.conf yang bersih
-cat <<EOF > /etc/apache2/ports.conf
-Listen ${PORT}
-Listen 80
-EOF
+# 2. Tulis ports.conf tanpa duplikasi Listen
+echo "Listen ${PORT}" > /etc/apache2/ports.conf
 
-# 3. Tulis VirtualHost 000-default.conf yang bersih
+# 3. Tulis VirtualHost 000-default.conf yang valid
 cat <<EOF > /etc/apache2/sites-available/000-default.conf
-<VirtualHost *:${PORT} *:80>
+<VirtualHost *:${PORT}>
     ServerName localhost
     DocumentRoot /var/www/html/public
 
@@ -32,13 +30,11 @@ cat <<EOF > /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 EOF
 
-# 4. FIX MUTLAK ERROR AH00534 (Multiple MPM):
-# Hapus semua MPM yang aktif di mods-enabled, lalu link HANYA mpm_prefork
+# 4. FIX MUTLAK MPM: Pastikan hanya single mpm_prefork yang aktif
 rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf 2>/dev/null || true
 ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
 ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
 
-# Pastikan rewrite aktif
 a2enmod rewrite 2>/dev/null || true
 a2ensite 000-default.conf 2>/dev/null || true
 
@@ -67,7 +63,7 @@ php artisan route:cache 2>/dev/null || true
 php artisan view:cache 2>/dev/null || true
 
 echo "========================================="
-echo "  Server SiARSIP siap. Menjalankan Apache..."
+echo "  Server SiARSIP siap. Menjalankan Apache di port ${PORT}..."
 echo "========================================="
 
 # Jalankan Apache di foreground
