@@ -55,13 +55,13 @@ final class PermissionSeeder extends Seeder
 
         // Role Administrator: Akses Penuh ke Semua Permission
         $adminRole = Role::where('slug', 'administrator')->first();
-        if ($adminRole) {
+        if ($adminRole && $adminRole->permissions()->count() === 0) {
             $adminRole->permissions()->sync(array_values($permissionIds));
         }
 
         // Role Petugas/User: Akses ke Surat Masuk & Surat Keluar (view, create, update, export) - TANPA delete
         $userRole = Role::where('slug', 'user')->first();
-        if ($userRole) {
+        if ($userRole && $userRole->permissions()->count() === 0) {
             $userPerms = [
                 $permissionIds['surat_masuk.view'] ?? null,
                 $permissionIds['surat_masuk.create'] ?? null,
