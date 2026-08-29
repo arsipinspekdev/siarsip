@@ -4,13 +4,20 @@ echo "========================================="
 echo "  SiARSIP — Railway Production Boot"
 echo "========================================="
 
-# 1. Konfigurasi Port Apache ke PORT dari Railway
-PORT="${PORT:-8080}"
-echo "[Config] Apache listening on port: ${PORT}"
-echo "Listen ${PORT}" > /etc/apache2/ports.conf
-sed -ri -e "s!<VirtualHost .*>!<VirtualHost \*:${PORT}>!g" /etc/apache2/sites-available/*.conf
+# 1. Konfigurasi ServerName dan Port Apache
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# 2. Pastikan hanya single MPM yang aktif (Mencegah error AH00534)
+PORT="${PORT:-8080}"
+echo "[Config] Apache listening on all ports: 80 and ${PORT}"
+echo "Listen 80" > /etc/apache2/ports.conf
+if [ "$PORT" != "80" ]; then
+    echo "Listen ${PORT}" >> /etc/apache2/ports.conf
+fi
+
+# Pastikan VirtualHost melayani semua port (*:*)
+sed -ri -e 's!<VirtualHost .*>!<VirtualHost *:*>\n    ServerName localhost!g' /etc/apache2/sites-available/*.conf
+
+# 2. Pastikan hanya single MPM yang aktif
 rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf 2>/dev/null || true
 rm -f /etc/apache2/mods-enabled/mpm_worker.load /etc/apache2/mods-enabled/mpm_worker.conf 2>/dev/null || true
 a2enmod mpm_prefork rewrite 2>/dev/null || true
