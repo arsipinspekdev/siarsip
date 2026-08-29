@@ -146,6 +146,86 @@
             </div>
         </aside>
 
+        {{-- ==================== SIDEBAR MOBILE (OFF-CANVAS) ==================== --}}
+        <div id="mobile-sidebar-backdrop" class="fixed inset-0 bg-neutral-900/50 z-40 hidden lg:hidden transition-opacity"></div>
+        
+        <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl">
+            {{-- Logo / Header Instansi (Mobile) --}}
+            <div class="p-5 border-b border-neutral-200/80 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-700 text-white flex items-center justify-center font-bold text-xl shadow-xs flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-extrabold text-neutral-900 tracking-tight leading-tight">ARSIP SURAT</h2>
+                        <p class="text-xs font-semibold text-neutral-500">Sistem Dokumen Dinas</p>
+                    </div>
+                </div>
+                <button id="close-sidebar-btn" type="button" class="p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+
+            {{-- Navigation Links (Mobile) --}}
+            <nav class="flex-1 px-3.5 py-4 overflow-y-auto space-y-1" aria-label="Menu Utama Mobile">
+                <p class="px-3 text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5 mt-1">MENU UTAMA</p>
+
+                @foreach($navItems as $item)
+                    @if($item['show'])
+                        <a
+                            href="{{ $item['url'] }}"
+                            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ $item['active'] ? 'bg-primary-50 text-primary-700 font-bold shadow-xs' : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900' }}"
+                        >
+                            <span class="{{ $item['active'] ? 'text-primary-600' : 'text-neutral-400' }}">
+                                {!! $item['icon'] !!}
+                            </span>
+                            <span>{{ $item['label'] }}</span>
+                        </a>
+                    @endif
+                @endforeach
+
+                @if($hasAdminSection)
+                    <div class="pt-4 mt-4 border-t border-neutral-200/80">
+                        <p class="px-3 text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5">PENGATURAN SISTEM</p>
+                        
+                        @if($canViewUsers)
+                            <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('users.*') ? 'bg-primary-50 text-primary-700 font-bold shadow-xs' : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900' }}">
+                                <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('users.*') ? 'text-primary-600' : 'text-neutral-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                <span>Kelola Pengguna</span>
+                            </a>
+                        @endif
+
+                        @if($canViewRoles)
+                            <a href="{{ route('roles.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('roles.*') ? 'bg-primary-50 text-primary-700 font-bold shadow-xs' : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900' }}">
+                                <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('roles.*') ? 'text-primary-600' : 'text-neutral-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                                <span>Wewenang (Role)</span>
+                            </a>
+                        @endif
+
+                        @if($canViewPermissions)
+                            <a href="{{ route('permissions.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 {{ request()->routeIs('permissions.*') ? 'bg-primary-50 text-primary-700 font-bold shadow-xs' : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900' }}">
+                                <svg class="w-5 h-5 flex-shrink-0 {{ request()->routeIs('permissions.*') ? 'text-primary-600' : 'text-neutral-400' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                                <span>Matrix Hak Akses</span>
+                            </a>
+                        @endif
+                    </div>
+                @endif
+            </nav>
+
+            {{-- User Quick Profile in Sidebar Footer (Mobile) --}}
+            <div class="p-3 border-t border-neutral-200/80 bg-neutral-50/50">
+                <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-100 transition group">
+                    <img src="{{ auth()->user()?->avatar_url }}" alt="Avatar" class="w-9 h-9 rounded-lg object-cover border border-neutral-300 flex-shrink-0" />
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-bold text-neutral-900 truncate group-hover:text-primary-600">{{ auth()->user()?->name }}</p>
+                        <p class="text-[11px] font-medium text-neutral-500 truncate">{{ auth()->user()?->role?->name ?? 'Pengguna' }}</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
         {{-- ==================== MAIN CONTENT WRAPPER ==================== --}}
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
             {{-- Top Navbar --}}
