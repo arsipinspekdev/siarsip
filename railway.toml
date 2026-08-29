@@ -1,11 +1,4 @@
 [deploy]
-# Gunakan Dockerfile yang ada di root
 dockerfilePath = "Dockerfile"
-
-# Health check — Railway akan cek endpoint ini setelah deploy
-healthcheckPath = "/login"
-healthcheckTimeout = 300
-
-# Restart otomatis jika crash
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 5
