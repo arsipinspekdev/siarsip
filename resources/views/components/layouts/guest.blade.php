@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title . ' — ' : '' }}{{ config('app.name', 'Arsip Surat') }}</title>
+    <title>{{ isset($title) ? $title . ' — ' : '' }}{{ config('app.name', 'SiARSIP') }}</title>
     <meta name="description" content="Sistem Pengelolaan Arsip Surat Kedinasan — Masuk untuk mengelola surat masuk dan keluar.">
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('logo.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
