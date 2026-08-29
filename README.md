@@ -434,5 +434,3 @@ Beberapa hal yang perlu diperhatikan sebelum penggunaan production:
 
 ## Lisensi
 Proyek ini dilisensikan di bawah MIT License — lihat file LICENSE untuk teks lengkapnya. Lisensi ini memberikan izin bebas untuk menggunakan, menyalin, memodifikasi, mengintegrasikan, mendistribusikan ulang, maupun mengembangkan lebih lanjut source code ini, termasuk untuk kebutuhan internal Inspektorat Daerah Samarinda maupun pihak lain, selama notice copyright dan izin (permission notice) pada file LICENSE tetap disertakan pada setiap salinan atau bagian substansial dari source code.
-
-Perlu dicatat, metadata pada composer.json (nama paket laravel/laravel dan deskripsi skeleton) masih merupakan bawaan template Laravel dan belum disesuaikan dengan identitas proyek SiARSIP; hal ini tidak memengaruhi keberlakuan LICENSE, namun disarankan untuk diperbarui agar konsisten.
