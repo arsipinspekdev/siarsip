@@ -5,8 +5,8 @@ echo "========================================="
 echo "  SiARSIP — Railway Production Boot"
 echo "========================================="
 
-# 1. Tentukan Port Tunggal (Railway selalu menyuplai $PORT, default 80 jika tidak ada)
-PORT="${PORT:-80}"
+# 1. Tentukan Port Tunggal (Railway menyuplai $PORT, default 8080)
+PORT="${PORT:-8080}"
 echo "[Config] Apache listening on Port: ${PORT}"
 echo "export PORT=${PORT}" >> /etc/apache2/envvars
 
