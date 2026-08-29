@@ -56,7 +56,7 @@ php artisan storage:link --force 2>/dev/null || true
 
 # 7. Jalankan Migrasi & Seed Database
 echo "[2/4] Menjalankan migrasi database..."
-php artisan migrate --force || true
+php artisan migrate --force || { echo "MIGRASI GAGAL! Periksa koneksi database Anda."; exit 1; }
 
 echo "[3/4] Mengisi data awal akun admin & roles..."
 php artisan db:seed --class=RoleSeeder --force 2>/dev/null || true
