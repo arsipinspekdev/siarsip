@@ -400,19 +400,21 @@
                     <thead>
                         <tr>
                             <th style="width:4%">No.</th>
+                            <th style="width:16%">Nomor Surat</th>
                             <th style="width:10%">Tgl. Surat</th>
-                            <th style="width:11%">Sifat Surat</th>
-                            <th style="width:16%">Pengirim</th>
-                            <th style="width:11%">Tgl. Penomoran</th>
-                            <th style="width:17%">Disposisi</th>
-                            <th style="width:14%">Pengelola</th>
-                            <th style="width:17%">Jenis Surat</th>
+                            <th style="width:10%">Sifat Surat</th>
+                            <th style="width:14%">Pengirim</th>
+                            <th style="width:10%">Tgl. Penomoran</th>
+                            <th style="width:13%">Disposisi</th>
+                            <th style="width:11%">Pengelola</th>
+                            <th style="width:12%">Jenis Surat</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($items as $index => $item)
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
+                                <td><strong>{{ $item->nomor_surat ?? '—' }}</strong></td>
                                 <td class="text-center">{{ $item->tanggal_surat?->format('d/m/Y') }}</td>
                                 <td class="text-center">{{ $item->sifat_surat ?? '—' }}</td>
                                 <td>{{ $item->pengirim ?? '—' }}</td>
@@ -423,7 +425,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center" style="padding: 28px; color: #6b7280; font-style: italic;">
+                                <td colspan="9" class="text-center" style="padding: 28px; color: #6b7280; font-style: italic;">
                                     Tidak ada data surat keluar yang sesuai.
                                 </td>
                             </tr>
