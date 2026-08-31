@@ -16,12 +16,18 @@ final class UpdateSuratMasukRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_surat'    => ['required', 'string', 'max:100'],
-            'tanggal_surat'  => ['required', 'date'],
-            'tanggal_terima' => ['required', 'date'],
-            'asal_surat'     => ['required', 'string', 'max:255'],
-            'perihal'        => ['required', 'string'],
-            'file_surat'     => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png', 'max:102400'],
+            'nomor_surat'        => ['required', 'string', 'max:100'],
+            'sifat_surat'        => ['nullable', 'string', 'in:Segera,Biasa,Penting,Rahasia,Tertutup'],
+            'pengirim'           => ['nullable', 'string', 'max:255'],
+            'tanggal_penomoran'  => ['nullable', 'date'],
+            'disposisi'          => ['nullable', 'string', 'max:255'],
+            'pengelola'          => ['nullable', 'string', 'max:255'],
+            'jenis_surat'        => ['nullable', 'string', 'max:100'],
+            'tanggal_surat'      => ['required', 'date'],
+            'tanggal_terima'     => ['required', 'date'],
+            'asal_surat'         => ['required', 'string', 'max:255'],
+            'perihal'            => ['required', 'string'],
+            'file_surat'         => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png', 'max:102400'],
         ];
     }
 

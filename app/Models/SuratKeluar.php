@@ -18,6 +18,12 @@ final class SuratKeluar extends Model
     protected $fillable = [
         'no_agenda',
         'nomor_surat',
+        'sifat_surat',
+        'pengirim',
+        'tanggal_penomoran',
+        'disposisi',
+        'pengelola',
+        'jenis_surat',
         'tanggal_surat',
         'tujuan_surat',
         'perihal',
@@ -27,7 +33,8 @@ final class SuratKeluar extends Model
     ];
 
     protected $casts = [
-        'tanggal_surat' => 'date',
+        'tanggal_surat'     => 'date',
+        'tanggal_penomoran' => 'date',
     ];
 
     /**

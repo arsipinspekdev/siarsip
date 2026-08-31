@@ -400,29 +400,30 @@
                     <thead>
                         <tr>
                             <th style="width:4%">No.</th>
-                            <th style="width:11%">No. Agenda</th>
-                            <th style="width:22%">Nomor Surat</th>
-                            <th style="width:12%">Tgl. Terima</th>
-                            <th style="width:22%">Asal Pengirim</th>
-                            <th style="width:29%">Perihal</th>
+                            <th style="width:10%">Tgl. Surat</th>
+                            <th style="width:11%">Sifat Surat</th>
+                            <th style="width:16%">Pengirim</th>
+                            <th style="width:11%">Tgl. Penomoran</th>
+                            <th style="width:17%">Disposisi</th>
+                            <th style="width:14%">Pengelola</th>
+                            <th style="width:17%">Jenis Surat</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($items as $index => $item)
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
-                                <td class="text-center text-bold">{{ $item->no_agenda_formatted }}</td>
-                                <td>
-                                    <strong>{{ $item->nomor_surat }}</strong><br>
-                                    <small style="color:#555">Tgl: {{ $item->tanggal_surat?->format('d/m/Y') }}</small>
-                                </td>
-                                <td class="text-center">{{ $item->tanggal_terima?->format('d/m/Y') }}</td>
-                                <td>{{ $item->asal_surat }}</td>
-                                <td>{{ $item->perihal }}</td>
+                                <td class="text-center">{{ $item->tanggal_surat?->format('d/m/Y') }}</td>
+                                <td class="text-center">{{ $item->sifat_surat ?? '—' }}</td>
+                                <td>{{ $item->pengirim ?? $item->asal_surat ?? '—' }}</td>
+                                <td class="text-center">{{ $item->tanggal_penomoran?->format('d/m/Y') ?? '—' }}</td>
+                                <td>{{ $item->disposisi ?? '—' }}</td>
+                                <td>{{ $item->pengelola ?? '—' }}</td>
+                                <td>{{ $item->jenis_surat ?? '—' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center" style="padding: 28px; color: #6b7280; font-style: italic;">
+                                <td colspan="8" class="text-center" style="padding: 28px; color: #6b7280; font-style: italic;">
                                     Tidak ada data surat masuk yang sesuai.
                                 </td>
                             </tr>

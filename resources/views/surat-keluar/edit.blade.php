@@ -52,6 +52,67 @@
                     />
                 </div>
 
+                {{-- Sifat Surat & Pengirim --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <x-form-select
+                        name="sifat_surat"
+                        label="Sifat Surat"
+                        :required="false"
+                        placeholder="-- Pilih Sifat Surat --"
+                        :options="['Segera' => 'Segera', 'Biasa' => 'Biasa', 'Penting' => 'Penting', 'Rahasia' => 'Rahasia', 'Tertutup' => 'Tertutup']"
+                        :selected="$suratKeluar->sifat_surat"
+                        helper="Pilih klasifikasi sifat surat"
+                    />
+                    <x-form-input
+                        name="pengirim"
+                        label="Pengirim"
+                        :required="false"
+                        :value="$suratKeluar->pengirim"
+                        placeholder="Contoh: Nama instansi atau individu pengirim"
+                        helper="Nama pihak yang mengirimkan atau menandatangani surat ini"
+                    />
+                </div>
+
+                {{-- Tanggal Penomoran & Disposisi --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <x-form-input
+                        name="tanggal_penomoran"
+                        label="Tanggal Penomoran"
+                        type="date"
+                        :required="false"
+                        :value="$suratKeluar->tanggal_penomoran?->format('Y-m-d')"
+                        helper="Tanggal surat mendapat nomor registrasi"
+                    />
+                    <x-form-input
+                        name="disposisi"
+                        label="Disposisi"
+                        :required="false"
+                        :value="$suratKeluar->disposisi"
+                        placeholder="Contoh: Kepala Seksi Arsip"
+                        helper="Pihak yang mendapat disposisi surat ini"
+                    />
+                </div>
+
+                {{-- Pengelola & Jenis Surat --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <x-form-input
+                        name="pengelola"
+                        label="Pengelola"
+                        :required="false"
+                        :value="$suratKeluar->pengelola"
+                        placeholder="Contoh: Bagian Tata Usaha"
+                        helper="Unit atau petugas yang mengelola surat ini"
+                    />
+                    <x-form-input
+                        name="jenis_surat"
+                        label="Jenis Surat"
+                        :required="false"
+                        :value="$suratKeluar->jenis_surat"
+                        placeholder="Contoh: Surat Edaran / Nota Dinas"
+                        helper="Jenis atau kategori surat"
+                    />
+                </div>
+
                 {{-- Perihal --}}
                 <x-form-textarea
                     name="perihal"
