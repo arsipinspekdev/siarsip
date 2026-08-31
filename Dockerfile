@@ -70,25 +70,34 @@ RUN a2dismod mpm_event mpm_worker 2>/dev/null || true \
     && a2enmod mpm_prefork rewrite
 
 # -------------------------------------------
-# 6. Set working directory & copy project
+# 6. Set working directory & install dependencies
 # -------------------------------------------
 WORKDIR /var/www/html
 
-COPY . .
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_NO_INTERACTION=1
 
-# -------------------------------------------
-# 7. Install PHP dependencies (no dev)
-# -------------------------------------------
+# Copy composer files first for optimal Docker layer caching
+COPY composer.json composer.lock ./
+
 RUN composer install \
     --no-dev \
-    --optimize-autoloader \
-    --no-interaction \
+    --no-scripts \
+    --no-autoloader \
+    --prefer-dist \
     --no-progress
 
-# -------------------------------------------
-# 8. Install Node deps & build frontend assets
-# -------------------------------------------
-RUN npm ci && npm run build && rm -rf node_modules
+# Copy package files and install JS dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy the rest of the application code
+COPY . .
+
+# Generate optimized autoloader and build frontend
+RUN composer dump-autoload --optimize --no-dev \
+    && npm run build \
+    && rm -rf node_modules
 
 # -------------------------------------------
 # 9. Fix permissions
