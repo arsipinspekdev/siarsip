@@ -15,10 +15,32 @@ use Illuminate\View\View;
 final class AuthController extends Controller
 {
     /**
+     * Maximum failed login attempts allowed before ban.
+     */
+    private const MAX_ATTEMPTS = 3;
+
+    /**
+     * Ban duration in seconds (1 minute).
+     */
+    private const DECAY_SECONDS = 60;
+
+    /**
+     * Get the rate limiting throttle key for the request.
+     */
+    private function throttleKey(Request $request): string
+    {
+        return 'login_attempt|' . $request->ip();
+    }
+
+    /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        if (RateLimiter::tooManyAttempts($this->throttleKey($request), self::MAX_ATTEMPTS)) {
+            abort(404);
+        }
+
         return view('auth.login');
     }
 
@@ -27,6 +49,12 @@ final class AuthController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $throttleKey = $this->throttleKey($request);
+
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_ATTEMPTS)) {
+            abort(404);
+        }
+
         $request->validate([
             'login' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -34,17 +62,6 @@ final class AuthController extends Controller
             'login.required' => 'Nama pengguna (username) atau email wajib diisi.',
             'password.required' => 'Kata sandi wajib diisi.',
         ]);
-
-        $throttleKey = Str::lower($request->input('login')) . '|' . $request->ip();
-
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            $seconds = RateLimiter::availableIn($throttleKey);
-            $minutes = ceil($seconds / 60);
-
-            return back()->withInput($request->only('login', 'remember'))->withErrors([
-                'login' => "Terlalu banyak percobaan gagal. Silakan coba lagi dalam {$minutes} menit.",
-            ]);
-        }
 
         $login = $request->input('login');
         $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -57,10 +74,16 @@ final class AuthController extends Controller
         $remember = $request->boolean('remember');
 
         if (!Auth::attempt($credentials, $remember)) {
-            RateLimiter::hit($throttleKey, 300); // 5 menit cooldown
+            RateLimiter::hit($throttleKey, self::DECAY_SECONDS);
+
+            if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_ATTEMPTS)) {
+                abort(404);
+            }
+
+            $remaining = RateLimiter::remaining($throttleKey, self::MAX_ATTEMPTS);
 
             return back()->withInput($request->only('login', 'remember'))->withErrors([
-                'login' => 'Nama pengguna atau kata sandi yang Anda masukkan tidak cocok.',
+                'login' => "Nama pengguna atau kata sandi tidak cocok. Sisa percobaan: {$remaining} kali.",
             ]);
         }
 
