@@ -52,9 +52,9 @@ RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/custom.ini
 
 # -------------------------------------------
-# 4. Install Composer
+# 4. Install Composer (latest version)
 # -------------------------------------------
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # -------------------------------------------
 # 5. Configure Apache
@@ -80,12 +80,11 @@ ENV COMPOSER_NO_INTERACTION=1
 # Copy composer files first for optimal Docker layer caching
 COPY composer.json composer.lock ./
 
-RUN composer install \
-    --no-dev \
-    --no-scripts \
-    --no-autoloader \
-    --prefer-dist \
-    --no-progress
+# Fix GitHub HTTP/2 400 download issues by forcing HTTP 1.1 for curl & adding source fallback
+RUN composer config --global --no-plugins http.curl-options.CURLOPT_HTTP_VERSION 2 \
+    && composer config --global process-timeout 600 \
+    && (composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress || \
+        composer install --no-dev --no-scripts --no-autoloader --prefer-source --no-progress)
 
 # Copy package files and install JS dependencies
 COPY package.json package-lock.json ./
