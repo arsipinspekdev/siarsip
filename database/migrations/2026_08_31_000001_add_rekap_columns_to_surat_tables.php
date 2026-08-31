@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('surat_masuk', function (Blueprint $table) {
-            $table->string('sifat_surat', 50)->nullable()->after('nomor_surat');
-            $table->string('pengirim', 255)->nullable()->after('sifat_surat');
-            $table->date('tanggal_penomoran')->nullable()->after('pengirim');
-            $table->string('disposisi', 255)->nullable()->after('tanggal_penomoran');
-            $table->string('pengelola', 255)->nullable()->after('disposisi');
-            $table->string('jenis_surat', 100)->nullable()->after('pengelola');
+            $table->string('sifat_surat', 50)->nullable();
+            $table->string('pengirim', 255)->nullable();
+            $table->date('tanggal_penomoran')->nullable();
+            $table->string('disposisi', 255)->nullable();
+            $table->string('pengelola', 255)->nullable();
+            $table->string('jenis_surat', 100)->nullable();
         });
 
         Schema::table('surat_keluar', function (Blueprint $table) {
-            $table->string('sifat_surat', 50)->nullable()->after('nomor_surat');
-            $table->string('pengirim', 255)->nullable()->after('sifat_surat');
-            $table->date('tanggal_penomoran')->nullable()->after('pengirim');
-            $table->string('disposisi', 255)->nullable()->after('tanggal_penomoran');
-            $table->string('pengelola', 255)->nullable()->after('disposisi');
-            $table->string('jenis_surat', 100)->nullable()->after('pengelola');
+            $table->string('sifat_surat', 50)->nullable();
+            $table->string('pengirim', 255)->nullable();
+            $table->date('tanggal_penomoran')->nullable();
+            $table->string('disposisi', 255)->nullable();
+            $table->string('pengelola', 255)->nullable();
+            $table->string('jenis_surat', 100)->nullable();
         });
     }
 
