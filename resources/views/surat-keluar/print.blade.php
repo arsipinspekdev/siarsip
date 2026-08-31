@@ -400,9 +400,9 @@
                     <thead>
                         <tr>
                             <th style="width:4%">No.</th>
-                            <th style="width:16%">Nomor Surat</th>
                             <th style="width:10%">Tgl. Surat</th>
                             <th style="width:10%">Sifat Surat</th>
+                            <th style="width:16%">Nomor Surat</th>
                             <th style="width:14%">Pengirim</th>
                             <th style="width:10%">Tgl. Penomoran</th>
                             <th style="width:13%">Disposisi</th>
@@ -414,9 +414,9 @@
                         @forelse($items as $index => $item)
                             <tr>
                                 <td class="text-center">{{ $index + 1 }}</td>
-                                <td><strong>{{ $item->nomor_surat ?? '—' }}</strong></td>
                                 <td class="text-center">{{ $item->tanggal_surat?->format('d/m/Y') }}</td>
                                 <td class="text-center">{{ $item->sifat_surat ?? '—' }}</td>
+                                <td><strong>{{ $item->nomor_surat ?? '—' }}</strong></td>
                                 <td>{{ $item->pengirim ?? '—' }}</td>
                                 <td class="text-center">{{ $item->tanggal_penomoran?->format('d/m/Y') ?? '—' }}</td>
                                 <td>{{ $item->disposisi ?? '—' }}</td>
