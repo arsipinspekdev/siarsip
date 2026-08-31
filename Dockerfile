@@ -80,11 +80,13 @@ ENV COMPOSER_NO_INTERACTION=1
 # Copy composer files first for optimal Docker layer caching
 COPY composer.json composer.lock ./
 
-# Fix GitHub HTTP/2 400 download issues by forcing HTTP 1.1 for curl & adding source fallback
-RUN composer config --global --no-plugins http.curl-options.CURLOPT_HTTP_VERSION 2 \
-    && composer config --global process-timeout 600 \
-    && (composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-progress || \
-        composer install --no-dev --no-scripts --no-autoloader --prefer-source --no-progress)
+# Install PHP dependencies via source (git clone) to avoid GitHub codeload zip download issues
+RUN composer install \
+    --no-dev \
+    --no-scripts \
+    --no-autoloader \
+    --prefer-source \
+    --no-progress
 
 # Copy package files and install JS dependencies
 COPY package.json package-lock.json ./
